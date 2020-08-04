@@ -16,7 +16,7 @@ Fullcalendarについて
 以下備忘録
 
 ＜---2020.08.04.20.00----
-[重要]ファイルの構成を一新しました。（旧ファイル群は"old"フォルダに入れました）
+[重要]ファイルの構成を一新しました。
 理由：nodeのインストールが絡むと結合が怠いので、古いバージョン(具体的には4.3.1)を採用しました。
 また、ファイル一新につき通信関係のファイルも無くなったので悪しからず。（とりあえず後回し）
 
@@ -34,8 +34,6 @@ Fullcalendarについて
 │　└calendar-list.js
 │　└calendar-locales-all.js
 │　└calendar-timegrid.js
-│　old
-│　└旧開発フォルダ
 │　calendar-my.html
 │　readme.txt
 └
