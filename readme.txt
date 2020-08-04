@@ -15,6 +15,33 @@ Fullcalendarについて
 
 以下備忘録
 
+＜---2020.08.04.20.00----
+[重要]ファイルの構成を一新しました。（旧ファイル群は"old"フォルダに入れました）
+理由：nodeのインストールが絡むと結合が怠いので、古いバージョン(具体的には4.3.1)を採用しました。
+また、ファイル一新につき通信関係のファイルも無くなったので悪しからず。（とりあえず後回し）
+
+現在開発フォルダ
+│
+│　css
+│　└calendar-core.css
+│　└calendar-daygrid.css
+│　└calendar-list.css
+│　└calendar-timegrid.css
+│　js
+│　└calendar-core.js
+│　└calendar-daygrid.js
+│　└calendar-interaction.js
+│　└calendar-list.js
+│　└calendar-locales-all.js
+│　└calendar-timegrid.js
+│　old
+│　└旧開発フォルダ
+│　calendar-my.html
+│　readme.txt
+└
+
+----2020.08.04.20.00---＞
+
 ＜---2020.07.31.10.00----
 htmlファイルを２つ追加、俺の実装用で追加したやつなのであまり関係ない。
 php*2&js*1ファイルを追加、使うか分からないけど公式のsampleファイルにあったので一応持ってきた。
