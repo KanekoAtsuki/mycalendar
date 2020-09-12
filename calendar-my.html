@@ -3,18 +3,28 @@
 
 <head>
     <meta charset='utf-8' />
+    <!-- FontAwesomeアイコンの呼び出し(CSSの前に配置する必要あり) -->
+    <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
     <link href="css/calendar-core.css" rel="stylesheet" />
     <link href="css/calendar-daygrid.css" rel="stylesheet" />
     <link href="css/calendar-timegrid.css" rel="stylesheet" />
     <link href="css/calendar-list.css" rel="stylesheet" />
+    <link href="css/calendar-puls-addevent.css" rel="stylesheet" />
+    <!--モーダルウィンドウ-->
+    <link href="css/test1.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="js/calendar-core.js"></script>
     <script src="js/calendar-interaction.js"></script>
     <script src="js/calendar-daygrid.js"></script>
     <script src="js/calendar-timegrid.js"></script>
     <script src="js/calendar-list.js"></script>
     <script src="js/calendar-locales-all.js"></script>
+
+
+
     <script>
         var calendar = null; // calendarオブジェクトをグローバル変数にしておく
+        var date_now = new Date(); // 日付の取得
 
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
@@ -28,7 +38,7 @@
                 },
                 //timeZone: 'Asia/Tokyo',
                 locale: 'ja',
-                defaultDate: '2020-08-12',
+                defaultDate: date_now,
                 navLinks: true, // can click day/week names to navigate views
                 businessHours: { //予定を入れることの出来る範囲を設定
                     daysOfWeek: [1, 2, 3, 4, 5], //0=Sunday
@@ -37,7 +47,24 @@
                 }, // "true"で土日の灰色設定
                 selectable: true,
                 selectMirror: true,
+                //クリック時の予定追加処理
                 select: function(arg) {
+                    //予定追加用ポップアップ
+                    addpopup()
+
+                    /*
+                    var title = prompt('Event Title:');
+                    if (title) {
+                        calendar.addEvent({
+                            title: title,
+                            start: '2020-09-18',
+                            end: '2020-09-20',
+                            //allDay: arg.allDay
+                        })
+                    }
+                    */
+
+                    /*
                     var title = prompt('Event Title:');
                     if (title) {
                         calendar.addEvent({
@@ -47,10 +74,22 @@
                             allDay: arg.allDay
                         })
                     }
+                    */
                     calendar.unselect()
                 },
                 editable: true,
-                events: [{
+                events: {
+                    /*url: 'php/get-events.php',*/ //本来こっちを使う
+                    url: 'json/events.json', //仮置きでjson直置き
+                    failure: function() {
+                        document.getElementById('script-warning').style.display = 'block'
+                    }
+                },
+
+
+
+                /*
+                [{
                         id: 'event',
                         title: 'Business Lunch',
                         start: '2020-08-03T13:00:00',
@@ -71,22 +110,6 @@
                         title: 'Party',
                         start: '2020-08-29T20:00:00'
                     },
-                    /*
-                    // "Meeting"を配置することの出来る範囲
-
-                    {
-                        groupId: 'availableForMeeting',
-                        start: '2020-08-11T10:00:00',
-                        end: '2020-08-11T16:00:00',
-                        rendering: 'background'
-                    },
-                    {
-                        groupId: 'availableForMeeting',
-                        start: '2020-08-13T10:00:00',
-                        end: '2020-08-13T16:00:00',
-                        rendering: 'background'
-                    },
-                    */
 
                     // 赤い領域：イベントをドロップできない領域
                     {
@@ -96,16 +119,17 @@
                         rendering: 'background',
                         color: '#ff9f89'
                     },
-                ],
+                ],*/
+                //時間の表示変更 [hh:mm]
                 eventTimeFormat: {
                     hour: 'numeric',
                     minute: '2-digit'
-                } //時間の表示変更 [hh:mm]
+                }
+
             });
 
             calendar.render();
         });
-
     </script>
     <script>
         $('#EntryDate').on('change', function() {
@@ -141,8 +165,35 @@
                 }
             }
         }
-
     </script>
+
+    <!--モーダルウィンドウ
+    <script>
+        //ボタンを押した際にポップアップ
+        function popupImage() {
+            var popup = document.getElementById('js-popup');
+            if (!popup) return;
+
+            var blackBg = document.getElementById('js-black-bg');
+
+            var blackBg = document.getElementById('js-black-bg');
+            var closeBtn = document.getElementById('js-close-btn');
+            var showBtn = document.getElementById('js-show-popup');
+
+            closePopUp(blackBg);
+            closePopUp(closeBtn);
+            closePopUp(showBtn);
+
+            function closePopUp(elem) {
+                if (!elem) return;
+                elem.addEventListener('click', function() {
+                    popup.classList.toggle('is-show');
+                });
+            }
+        }
+        popupImage();
+    </script>-->
+
     <style>
         body {
             margin: 40px 10px;
@@ -155,14 +206,98 @@
             max-width: 900px;
             margin: 0 auto;
         }
-
     </style>
 </head>
 
 <body>
+    <!--モーダル用ボタン
+    <button id="js-show-popup">Show Popup</button>-->
 
+    <!--予定追加用テストボタン-->
+    <button id="event-reflection">イベント追加テスト</button>
+
+    <!--乱数生成テストボタン-->
+    <button id="event-RandomNumber">乱数生成テスト</button>
+
+    <!--イベントテストボタン-->
+    <button id="event-events">イベントテスト</button>
+    
+    <!--JSON.parse()-->
+    <button id="event-parse">JSON.parse()</button>
+    
+    <!--http:POST-->
+    <button id="event-http-post-test">http:POST</button>
+
+    <!--カレンダー本体-->
     <div id='calendar'></div>
 
-</body>
+    <!--モーダルウィンドウ-->
+    <div class="popup" id="js-popup">
+        <div class="popup-inner">
+            <div class="close-btn" id="js-close-btn"><i class="fas fa-times"></i></div>
+            <!--ここから-->
 
-</html>
+
+            <form id="addevent_modal" action="#">
+                <div class="cp_iptxt">
+                    <input type="text" id="addevent_title" placeholder="タイトル">
+                </div>
+
+
+                <!--
+                トグルスイッチ
+                <div class="switch">
+                    <label class="switch__label">
+                        <input type="checkbox" class="switch__input" />
+                        <span class="switch__content"></span>
+                        <span class="switch__circle"></span>
+                    </label>
+                </div>
+                -->
+
+                <!--
+                  日付設定用。
+                  一旦無視-->
+                <div>
+                    <label>開始日時</label><br>
+                    <input type="date" id="addevent_start_time">
+                </div>
+                <div>
+                    <label>終了日時</label><br>
+                    <input type="date" id="addevent_end_time">
+                </div>
+
+
+                <!--
+                一旦デザイン無視
+                <div class="cp_iptxt">
+                    <input type="text" placeholder="開始日時">
+                    <i class="fa fa-arrow-right fa-lg fa-fw" aria-hidden="true"></i>
+                </div>
+                <div class="cp_iptxt">
+                    <input type="text" placeholder="終了日時">
+                    <i class="fa fa-arrow-left fa-lg fa-fw" aria-hidden="true"></i>
+                </div>
+                -->
+
+            </form>
+
+            <div id="addevent_check">
+                <input type="button" id="js-save-btn" value="保存">
+            </div>
+
+
+            <!--ここまで-->
+        </div>
+        <div class="black-background" id="js-black-bg"></div>
+    </div>
+
+
+
+
+
+    <!--モーダルウィンドウ-->
+    <script src="js/test1.js"></script>
+    <script src="js/calendar-puls-addevent.js"></script>
+    <script src="js/calendar-puls-generate-json.js"></script>
+</body></html>
